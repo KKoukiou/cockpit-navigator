@@ -22,6 +22,7 @@ import cockpit from "cockpit";
 import React, { useState } from "react";
 
 import {
+    Button,
     Card,
     CardBody,
     CardHeader,
@@ -55,6 +56,14 @@ import { createDirectory, deleteItem, renameItem } from "./fileActions.jsx";
 const _ = cockpit.gettext;
 
 export const SidebarPanelDetails = ({ selected, path, setPath, setPathIndex, showHidden, setShowHidden }) => {
+    const getPermissions = (str) => {
+        let permissions = "";
+        if (str.slice(0, 1) === "r") { permissions += "Read/" }
+        if (str.slice(1, 2) === "w") { permissions += "Write/" }
+        if (str.slice(2, 3) === "x") { permissions += "Execute/" }
+        return permissions.slice(0, -1);
+    };
+
     return (
         <Card className="sidebar-card">
             <CardHeader>
@@ -93,11 +102,20 @@ export const SidebarPanelDetails = ({ selected, path, setPath, setPathIndex, sho
                         <DescriptionListTerm>{_("Info")}</DescriptionListTerm>
                         <DescriptionListDescription>{selected.info}</DescriptionListDescription>
                     </DescriptionListGroup>
-                    <DescriptionListGroup id="description-list-permissions">
-                        <DescriptionListTerm>{_("Permissions")}</DescriptionListTerm>
-                        <DescriptionListDescription>{selected.permissions}</DescriptionListDescription>
+                    <DescriptionListGroup id="description-list-owner-permissions">
+                        <DescriptionListTerm>{_("Owner permissions")}</DescriptionListTerm>
+                        <DescriptionListDescription>{getPermissions(selected.permissions.slice(1, 4))}</DescriptionListDescription>
+                    </DescriptionListGroup>
+                    <DescriptionListGroup id="description-list-group-permissions">
+                        <DescriptionListTerm>{_("Group permissions")}</DescriptionListTerm>
+                        <DescriptionListDescription>{getPermissions(selected.permissions.slice(4, 7))}</DescriptionListDescription>
+                    </DescriptionListGroup>
+                    <DescriptionListGroup id="description-list-other-permissions">
+                        <DescriptionListTerm>{_("Other permissions")}</DescriptionListTerm>
+                        <DescriptionListDescription>{getPermissions(selected.permissions.slice(7, 10))}</DescriptionListDescription>
                     </DescriptionListGroup>
                 </DescriptionList>
+                <Button variant="secondary">{_("Edit properties")}</Button>
             </CardBody>}
         </Card>
     );
