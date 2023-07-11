@@ -107,7 +107,13 @@ export const Application = () => {
                     return cockpit.spawn(["ls", "-ld", "/" + path.join("/") + "/" + file.path], { superuser: "try" }).then(res => {
                         return { ...file, permissions: res.split(" ")[0] };
                     });
-                })).then(res => { setFiles(res) });
+                })).then(res => {
+                    Promise.all(res.map(file => {
+                        return cockpit.spawn(["file", "/" + path.join("/") + "/" + file.path], { superuser: "try" }).then(res => {
+                            return { ...file, info: res.split(":")[1].slice(0, -1) };
+                        });
+                    })).then(res => setFiles(res));
+                });
             });
         };
         getFsList();

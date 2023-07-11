@@ -89,6 +89,10 @@ export const SidebarPanelDetails = ({ selected, path, setPath, setPathIndex, sho
                         <DescriptionListTerm>{_("Size")}</DescriptionListTerm>
                         <DescriptionListDescription>{cockpit.format("$0 $1", cockpit.format_bytes(selected.size), selected.size < 1000 ? "B" : "")}</DescriptionListDescription>
                     </DescriptionListGroup>}
+                    <DescriptionListGroup id="description-list-info">
+                        <DescriptionListTerm>{_("Info")}</DescriptionListTerm>
+                        <DescriptionListDescription>{selected.info}</DescriptionListDescription>
+                    </DescriptionListGroup>
                     <DescriptionListGroup id="description-list-permissions">
                         <DescriptionListTerm>{_("Permissions")}</DescriptionListTerm>
                         <DescriptionListDescription>{selected.permissions}</DescriptionListDescription>
