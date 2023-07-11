@@ -103,7 +103,11 @@ export const Application = () => {
             });
 
             channel.current.addEventListener("ready", () => {
-                setFiles(files);
+                Promise.all(files.map(file => {
+                    return cockpit.spawn(["ls", "-ld", "/" + path.join("/") + "/" + file.path], { superuser: "try" }).then(res => {
+                        return { ...file, permissions: res.split(" ")[0] };
+                    });
+                })).then(res => { setFiles(res) });
             });
         };
         getFsList();
